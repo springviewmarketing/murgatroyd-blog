@@ -1,0 +1,21 @@
+---
+layout: default
+title: Home
+---
+<div class="intro">
+  <h1>Murgatroyd Opticians Blog</h1>
+  <p>Eye care advice and news from our independent prescribers in Conisbrough and Staveley.</p>
+</div>
+
+<ul class="post-list">
+  {% for post in site.posts %}
+  <li>
+    <a href="{{ post.url | relative_url }}">
+      <p class="branch-tag">{% if post.branch %}{{ post.branch }}{% endif %}</p>
+      <h2>{{ post.title }}</h2>
+      <p class="post-date">{{ post.date | date: "%-d %B %Y" }}</p>
+      <p>{{ post.excerpt | strip_html | truncate: 140 }}</p>
+    </a>
+  </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | truncate: 160 }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="{{ '/' | relative_url }}">Murgatroyd Opticians</a>
+      <nav>
+        <a href="{{ '/' | relative_url }}">Blog</a>
+        <a href="https://www.murgatroydopticians.co.uk">Main site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Murgatroyd Opticians — Conisbrough, Doncaster &amp; Staveley (Murgatroyd Holmes Opticians), Chesterfield.</p>
+      <p><a href="https://www.murgatroydopticians.co.uk">Back to murgatroydopticians.co.uk</a></p>
+    </div>
+  </footer>
+</body>
+</html>
