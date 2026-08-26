@@ -40,6 +40,19 @@ function inline(text) {
   );
 }
 
+// Where the crop should centre, e.g. "center 18%". The header is a wide
+// band cut from a taller photo, so the default centre crop can slice through
+// faces. Lower percentages keep more of the top of the picture.
+function focusStyle(p) {
+  const v = p['image-focus'];
+  if (!v) return '';
+  if (!/^[a-z0-9 %.]+$/i.test(v)) {
+    problems.push(`${p.file}: image-focus "${v}" is not a valid position, e.g. "center 18%"`);
+    return '';
+  }
+  return ` style="object-position: ${attr(v)}"`;
+}
+
 function ukDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   const months = ['January','February','March','April','May','June','July',
@@ -267,7 +280,7 @@ ${header('../')}
 ${nav('../index.html')}
 
   <div class="hero">
-    <img src="../assets/img/${attr(p.image)}" alt="${attr(p['image-alt'])}">
+    <img src="../assets/img/${attr(p.image)}" alt="${attr(p['image-alt'])}"${focusStyle(p)}>
   </div>
 
   <main id="main" class="article">

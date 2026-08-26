@@ -5,6 +5,7 @@ date: 2026-08-26
 category: Urgent eyecare
 image: slit-lamp-examination-conisbrough.jpg
 image-alt: An optometrist examining a patient's eye at a slit lamp at Murgatroyd Opticians in Conisbrough
+image-focus: center 18%
 summary: For many sudden eye problems an optician is the right first call, not A&E or your GP. Both practices offer NHS funded urgent appointments, there is no charge, and you do not need a referral from anyone to use one.
 description: Both Murgatroyd practices offer free NHS urgent eye appointments for sudden eye problems. Who qualifies, what is covered, and when to go to A&E instead.
 standfirst: Both Murgatroyd Opticians in Conisbrough and Murgatroyd Holmes Opticians in Staveley offer NHS funded urgent eye appointments. Here is who can use them, what they cover, and when to go straight to A&E instead.
