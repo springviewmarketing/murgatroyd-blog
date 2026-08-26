@@ -1,77 +1,85 @@
 # Murgatroyd Opticians blog
 
-Plain HTML site served from GitHub Pages at <https://blog.murgatroydopticians.co.uk>.
-No build step, no Jekyll, no dependencies. What you commit is exactly what gets served.
+Static site served from GitHub Pages at <https://blog.murgatroydopticians.co.uk>.
+Pages are generated from plain text files, so the finished HTML never has to be
+edited by hand.
 
 ## Files
 
 ```
-index.html                  the blog listing page
-_post-template.html         blank starting point for a new post (not published)
-posts/                      one HTML file per post
-assets/css/blog.css         the only stylesheet, used by every page
-assets/img/                 logos, header photos, post thumbnails
-CNAME                       the custom domain, do not delete
-.nojekyll                   tells GitHub Pages to serve the files as they are
+content/            one plain text file per post - EDIT THESE
+posts/              generated pages - never edit by hand
+index.html          the listing page
+assets/css/blog.css the only stylesheet
+assets/img/         images used on the site
+incoming/           drop original photographs here before preparing them
+tools/build.js      builds posts/ and the listing from content/
+tools/prepare-images.js  shrinks photographs for the web
+CNAME               the custom domain - do not delete
+.nojekyll           serve the files as they are - do not delete
 ```
 
-## Publishing a new post
+The rule that matters: **`content/` is the source of truth.** Anything in
+`posts/` is regenerated on every build and hand edits are lost.
 
-Two edits, every time.
+## Publishing a post
 
-**1. Create the post**
+**1. Prepare the photographs.** Put the originals in `incoming/`, then run:
 
-Copy `_post-template.html` into `posts/` and rename it to something descriptive in
-lower case with hyphens, for example `posts/dry-eyes-in-winter.html`. The filename
-becomes the web address, so it is worth getting right.
+```bash
+node tools/prepare-images.js
+```
 
-Open it and work through the ten places marked `EDIT`. The first five are all in the
-head section at the top and cover the page title, the search description, the web
-address and the social sharing preview. Write the body using `<h2>` for each question
-heading and `<p>` for each paragraph. Leave the header, navigation and footer alone.
+Open the address it prints. Finished images appear in `assets/img/` at 1600px
+wide with tidied file names, usually 200 to 400KB. Originals are left alone,
+so empty `incoming/` afterwards.
 
-Delete the `<meta name="robots" content="noindex">` line. It exists only to keep the
-blank template out of Google, and leaving it in would hide your post too.
+**2. Write the post.** Create `content/your-post-name.md`. Copy an existing
+file to see the shape of it. The details at the top, then `---`, then the
+article using `##` for each question heading and a blank line between
+paragraphs.
 
-If the post has an FAQ section and you want it eligible for the expandable answers
-Google sometimes shows, copy the `FAQPage` block from
-`posts/childrens-eye-test-before-school.html` and update the questions to match.
-Only include it if the questions and answers match the article word for word,
-otherwise leave it out.
+**3. Build.**
 
-**2. Add it to the listing**
+```bash
+node tools/build.js
+```
 
-Open `index.html` and find the block marked `===== POST CARD =====`. Copy the whole
-`<article class="post-card">` block, paste the copy directly above the original so the
-newest post sits at the top, and change the five numbered items inside it: thumbnail,
-date, title and link, summary, and the read more link.
+This writes the post page, rebuilds the listing newest first, and checks the
+post against house style. It stops and tells you if something is wrong.
 
-Commit both files. GitHub Pages republishes in a minute or two.
+**4. Upload.** Drag the changed files onto GitHub. Normally that is
+`index.html` and the `posts` folder, plus `assets` if you added images.
+Drag folders as folders, not their contents.
 
-## House style reminders
+## Why it is generated rather than hand written
 
-The posts follow the Spring View Marketing standard, so when writing:
+Each post carries hidden mark-up telling Google what the page is and what
+questions it answers. That mark-up has to match the visible words exactly,
+or Google treats it as misleading. Generating both from one source means
+they cannot fall out of step.
+
+## House style
 
 - around 2,000 words, continuous prose
-- no bullet points, numbered lists or bold text inside the body copy
-- headings phrased as questions, answered directly in the first sentence or two
+- no bullet points, numbered lists or bold text in the body
+- headings phrased as questions, answered in the first sentence or two
 - British English, "patients" rather than customers or clients
-- no em dashes
+- no em dashes, the build will refuse to finish if it finds one
 - a genuine FAQ section at the end
 - descriptive link text, never "click here"
-- every health claim or statistic checked against a real source before it goes in
+- every health claim checked against a real source before writing
 
 ## Images
 
-Use the practice's own photography. Landscape images work best for the header, and
-anything around 1200 pixels wide is plenty. Put the file in `assets/img/` and always
-write a real description in the `alt` text, since that is what screen readers announce
-and what search engines read.
+Use the practice's own photography, never stock or AI generated. Landscape
+suits the header. Always write a real description in `image-alt`, since that
+is what screen readers announce and what search engines read.
 
 ## Changing the look
 
-Everything visual lives in `assets/css/blog.css`. The colours are set at the top of
-that file and match the main website:
+Everything visual is in `assets/css/blog.css`. The colours are set at the top
+and match the main website:
 
 | Colour | Hex | Used for |
 | --- | --- | --- |
@@ -79,4 +87,5 @@ that file and match the main website:
 | Teal | `#33cccc` | navigation bar, accent rules |
 | Grey | `#cccccc` | page background behind the white shell |
 
-Change a value there and it updates across every page.
+The header, navigation and footer appear in two places: `tools/build.js` for
+post pages, and `index.html` for the listing. Change both together.

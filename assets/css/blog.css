@@ -108,7 +108,7 @@ a:hover, a:focus { text-decoration: underline; }
    Navigation - teal bar, white uppercase links
    -------------------------------------------------------------------------- */
 
-.site-nav { background: var(--teal); padding: 0 3%; }
+.site-nav { background: var(--teal); padding: 0 2%; }
 
 .site-nav ul {
   list-style: none;
@@ -124,7 +124,8 @@ a:hover, a:focus { text-decoration: underline; }
   color: #fff;
   font-size: 0.8em;
   letter-spacing: 0.02em;
-  padding: 9px 10px;
+  text-transform: uppercase;   /* matches the main website navigation */
+  padding: 9px 8px;
   text-decoration: none;
   white-space: nowrap;
 }
