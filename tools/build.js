@@ -53,6 +53,37 @@ function focusStyle(p) {
   return ` style="object-position: ${attr(v)}"`;
 }
 
+// Where the small card thumbnail should centre, e.g. "12% center". The card
+// is a 3:2 box, so a wide banner gets cropped left and right rather than top
+// and bottom. Lower percentages keep more of the left of the picture.
+function thumbStyle(p) {
+  const v = p['thumb-focus'];
+  if (!v) return '';
+  if (!/^[a-z0-9 %.]+$/i.test(v)) {
+    problems.push(`${p.file}: thumb-focus "${v}" is not a valid position, e.g. "12% center"`);
+    return '';
+  }
+  return ` style="object-position: ${attr(v)}"`;
+}
+
+// The header is a wide band on desktop and a 4:3 box on phones. A wide
+// two-up banner survives the first and gets gutted by the second, so a post
+// can name a second picture for phones with "image-mobile". When it does,
+// the header becomes a <picture> and the phone gets its own photograph.
+function heroImage(p) {
+  const main = `<img src="../assets/img/${attr(p.image)}" alt="${attr(p['image-alt'])}"${focusStyle(p)}>`;
+  const mob = p['image-mobile'];
+  if (!mob) return '    ' + main;
+  if (!fs.existsSync(path.join(ROOT, 'assets', 'img', mob))) {
+    problems.push(`${p.file}: the image-mobile "${mob}" is not in assets/img/`);
+    return '    ' + main;
+  }
+  return `    <picture>
+      <source media="(max-width: 640px)" srcset="../assets/img/${attr(mob)}">
+      ${main}
+    </picture>`;
+}
+
 function ukDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   const months = ['January','February','March','April','May','June','July',
@@ -121,7 +152,8 @@ function renderBody(md) {
       html.push(`      <p>\n        ${inline(text)}\n      </p>`);
       // first paragraph after an FAQ question becomes that question's answer
       if (pendingQuestion) {
-        faq.push({ q: pendingQuestion, a: text });
+        // strip link syntax so the schema matches the words actually shown
+        faq.push({ q: pendingQuestion, a: text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') });
         pendingQuestion = null;
       }
     }
@@ -280,7 +312,7 @@ ${header('../')}
 ${nav('../index.html')}
 
   <div class="hero">
-    <img src="../assets/img/${attr(p.image)}" alt="${attr(p['image-alt'])}"${focusStyle(p)}>
+${heroImage(p)}
   </div>
 
   <main id="main" class="article">
@@ -325,7 +357,7 @@ function buildIndex(posts) {
   const cards = posts.map(p => `      <article class="post-card">
         <div class="post-card__media">
           <a href="posts/${p.slug}.html" tabindex="-1" aria-hidden="true">
-            <img src="assets/img/${attr(p.image)}" alt="">
+            <img src="assets/img/${attr(p.image)}" alt=""${thumbStyle(p)}>
           </a>
         </div>
         <div class="post-card__body">

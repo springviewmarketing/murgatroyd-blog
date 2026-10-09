@@ -1,0 +1,19 @@
+{
+  "out": "julia-corneal-transplant-banner.jpg",
+  "width": 1600,
+  "gap": 6,
+  "gapColour": "#33cccc",
+  "quality": 0.84,
+  "panels": [
+    {
+      "src": "incoming/DSCF0102.jpg",
+      "weight": 0.588,
+      "focus": 0.2
+    },
+    {
+      "src": "incoming/DSCF9898.jpg",
+      "weight": 0.412,
+      "focus": 0.22
+    }
+  ]
+}
